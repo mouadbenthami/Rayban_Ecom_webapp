@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+    <package name="default" namespace="/" extends="struts-default">
+
+        <default-action-ref name="index"/>
+        
+        <action name="index">
+            <result>
+                views/index.jsp
+            </result>
+        </action>
+     
+      <action name="about">
+            <result>
+                views/About.jsp
+            </result>
+       </action>
+       
+       <action name="registre">
+            <result>
+                views/Registre.jsp
+            </result>
+        </action>
+        
+        <action name="contact">
+            <result>
+                views/Contact.jsp
+            </result>
+        </action>
+        
+          <action name="Contact" class="action.ContactAction" method="addContact">
+          <result name="success" type="redirect"><param name="location">contact.action?Msg=true</param></result>
+          </action>
+        
+        <action name="signUp" class="action.usersAction" method="signUp">
+           <result name="success" type="redirect"><param name="location">index.action?Msg=true</param> </result>
+           <result name="failure" type="redirect"><param name="location">registre.action?Err=true</param> </result>
+           <result name="userEx"  type="redirect"><param name="location">registre.action?Err1=true</param> </result>
+        </action>
+        
+     <action name="logout" class="action.usersAction" method="logout">
+      <result name="success"> views/index.jsp </result>
+     </action>
+            
+
+     <action name="login" class="action.usersAction" method="login">
+      <result name="f" type="redirect"><param name="location">index.action?Err=true</param> </result>
+      <result name="s" type="chain">
+        <param name="actionName">articles</param>
+        <param name="namespace">/</param>
+        <param name="method">getAllArticles</param>
+      </result>
+     </action>
+
+     <action name="articles" class="action.articlesAction" method="getAllArticles">
+      <result name="success">/views/Articles.jsp</result>
+      <result name="failure"> views/index.jsp </result>
+     </action>
+     
+     <action name="allarticles" class="action.articlesAction" method="getAllArticles">
+     <result name="success"> views/all_articles.jsp </result>
+     <result name="failure"> views/index.jsp </result>
+     </action>
+     
+     <action name="search" class="action.articlesAction" method="searchByMC">
+      <result name="success"> views/Articles.jsp </result>
+      <result name="failure"> views/index.jsp </result>
+     </action>
+     
+     <action name="confirmation" class="action.commandesAction" method="confirmationCmd">
+       <result name="success" type="chain">
+       <param name="actionName">downloadFile</param>
+        <param name="namespace">/</param>
+        <param name="method">execute</param>
+      </result>
+      <result name="failure"> views/index.jsp </result>
+      <result name="invalide" type="chain"> 
+        <param name="actionName">articles</param>
+        <param name="namespace">/</param>
+        <param name="method">getAllArticles</param>
+      </result>
+     </action>
+     
+     <action name="edit" class="action.usersAction" method="edit">
+      <result name="success" type="redirect">
+      <param name="location">/articles.action?Msg=true</param> 
+      </result>
+      <result name="failure"> views/index.jsp </result>
+      <result name="invalid" type="redirect"><param name="location">/articles.action?openModal=true</param> </result>
+      <result name="userEx"  type="redirect"><param name="location">/articles.action?err=true</param> </result>
+     </action>
+      
+     <action name="downloadFile" class="action.PdfAction" method="execute">
+            <result name="s" type="stream">
+                <param name="contentType">application/octet-stream</param>
+                <param name="inputName">inputStream</param>
+                <param name="contentDisposition">attachment;filename="${fileName}"</param>
+                <param name="bufferSize">4096</param>
+            </result>
+       </action>
+       
+      <action name="cart" class="action.commandesAction" method="getAllCmds">
+        <result name="success"> views/commandes.jsp </result>
+        <result name="failure"> views/index.jsp </result>
+     </action>
+       
+    </package>
+    
+   
+
+    
+</struts>
